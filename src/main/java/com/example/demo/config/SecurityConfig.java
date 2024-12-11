@@ -33,8 +33,9 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) // Wyłącz CSRF (opcjonalne dla API REST)
                 .cors(Customizer.withDefaults()) // Włącz CORS (domyślną konfiguracją)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Zezwól na preflight request
-                        .anyRequest().authenticated() // Wymagaj uwierzytelnienia dla reszty
+                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // Zezwól na preflight (dla CORS)
+                .requestMatchers("/register").permitAll() // Publiczny dostęp do endpointu rejestracji
+                .anyRequest().authenticated() // Reszta wymaga autoryzacji//
                 )
                 .httpBasic(Customizer.withDefaults()); // Użyj HTTP Basic Authentication (opcjonalne)
 

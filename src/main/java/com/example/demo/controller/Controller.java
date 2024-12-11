@@ -57,17 +57,19 @@ public class Controller {
         repository.deleteById(id);
     }
 
-    // Rejestracja użytkownika
+    // Rejestracja użytkownika (z poprawioną ścieżką URL + walidacja)
     @PostMapping("/register")
-    public String register(@RequestBody User user) {
+    public ResponseEntity<?> register(@RequestBody User user) {
         // Sprawdzenie, czy użytkownik już istnieje
         if (userRepository.findByUsername(user.getUsername()).isPresent()) {
-            return "User already exists!";
+            return ResponseEntity.badRequest().body("User already exists!");
         }
-        // Kodowanie i zapis hasła
+        // Kodowanie i zapis hasła, a następnie zapis użytkownika
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
-        return "User registered successfully!";
+
+        // Zwrot statusu 201 z zapisanym obiektem użytkownika
+        return ResponseEntity.status(201).body(user);
     }
 
     // Dodanie nowego nastroju zalogowanego użytkownika
@@ -77,7 +79,10 @@ public class Controller {
         User user = userRepository.findByUsername(principal.getName())
                 .orElseThrow(() -> new RuntimeException("User not found with username: " + principal.getName()));
 
-        mood.setUserId(user.getId()); // Ustawienie ID użytkownika w obiekcie Mood
+        // Ustawienie użytkownika w obiekcie Mood
+        mood.setUser(user);
+
+        // Zapis obiektu Mood w bazie danych
         return repository.save(mood);
     }
 }

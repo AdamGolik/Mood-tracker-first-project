@@ -1,5 +1,6 @@
 package com.example.demo.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -11,19 +12,27 @@ public class Mood {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private Long id;
+
     @Column(name = "mood")
     private String mood;
+
     @Column(name = "description")
     private String description;
-    @Column(name = "alkochol")
-    private Boolean alkochol;
+
+    @Column(name = "alcohol") // Zmieniono nazwę i kolumnę
+    private Boolean alcohol;
+
     @Column(name = "sugar")
     private Boolean sugar;
+
     @Column(name = "workout")
     private Boolean workout;
+
     @Column(name = "sleep")
     private Integer sleep;
-    // Pole dodane dla identyfikacji właściciela `Mood`
-    @Column(name = "user_id")
-    private Long userId;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonBackReference
+    private User user;
 }
