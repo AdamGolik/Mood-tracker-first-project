@@ -1,4 +1,3 @@
-
 # Mood Tracker API
 
 Mood Tracker API to aplikacja do zarządzania nastrojami użytkownika za pomocą REST API. Projekt oparty jest na Spring Boot, z wykorzystaniem Spring Security i JPA dla obsługi bazy danych.
@@ -136,54 +135,144 @@ curl -u newUser:securePassword -X GET http://localhost:8080/
 
 ## Testowanie za pomocą Postman
 
-### Rejestracja użytkownika
-1. **Metoda**: `POST`
-2. **URL**: `http://localhost:8080/register`
-3. **Nagłówki**: Content-Type: `application/json`
-4. **Body (JSON)**:
-   ```json
-   {
-       "username": "newUser",
-       "password": "securePassword"
-   }
-   ```
+1. **Pobierz i zainstaluj Postman** ze strony [Postman Web](https://www.postman.com/).
 
-### Dodawanie nowego nastroju
-1. **Metoda**: `POST`
-2. **URL**: `http://localhost:8080/moods`
-3. **Nagłówki**:
-   - Content-Type: `application/json`
-   - Authorization: **Basic Auth** (podaj `username` i `password`).
-4. **Body (JSON)**:
-   ```json
-   {
-       "moodText": "Feeling great!",
-       "description": "I had a fun day!",
-       "alkochol": 1,
-       "sugar": 3,
-       "workout": 0,
-       "sleep": 6
-   }
-   ```
+2. **Utwórz Workspace**:
+   - Otwórz aplikację Postman.
+   - Stwórz nowy Workspace lub użyj już istniejącego.
 
-### Pobranie wszystkich nastrojów
-1. **Metoda**: `GET`
-2. **URL**: `http://localhost:8080/`
-3. **Nagłówki**:
-   - Authorization: **Basic Auth** (podaj `username` i `password`).
+3. **Endpointy do przetestowania**:
+
+---
+
+### **1. Rejestracja nowego użytkownika**
+
+#### Szczegóły:
+- **Metoda**: `POST`
+- **URL**: `http://localhost:8080/register`
+- **Nagłówki**:
+  - Content-Type: `application/json`
+- **Body (JSON)**:
+  ```json
+  {
+      "username": "newUser",
+      "password": "securePassword"
+  }
+  ```
+
+#### Kroki:
+1. Wybierz metodę `POST` w Postman.
+2. Ustaw URL: `http://localhost:8080/register`.
+3. Przejdź do zakładki **Headers** i dodaj:
+   ```
+   Key: Content-Type 
+   Value: application/json
+   ```
+4. W zakładce **Body** wybierz typ `raw`, a następnie wklej podany JSON.
+5. Kliknij `Send`.
+
+---
+
+### **2. Dodawanie nowego nastroju**
+
+#### Szczegóły:
+- **Metoda**: `POST`
+- **URL**: `http://localhost:8080/moods`
+- **Nagłówki**:
+  - Content-Type: `application/json`
+  - Authorization: Basic Auth (ustaw username i password).
+- **Body (JSON)**:
+  ```json
+  {
+      "moodText": "Feeling great!",
+      "description": "I had a great day!",
+      "alkochol": 0,
+      "sugar": 2,
+      "workout": 1,
+      "sleep": 7
+  }
+  ```
+
+#### Kroki:
+1. Wybierz metodę `POST` w Postman.
+2. Przejdź do zakładki **Authorization** i wybierz `Basic Auth`. Ustaw swoje `username` oraz `password`.
+3. Ustaw URL: `http://localhost:8080/moods`.
+4. Przejdź do zakładki **Headers** i dodaj:
+   ```
+   Key: Content-Type 
+   Value: application/json
+   ```
+5. W zakładce **Body** wybierz typ `raw`, a następnie wklej podany JSON.
+6. Kliknij `Send`.
+
+---
+
+### **3. Pobieranie wszystkich nastrojów**
+
+#### Szczegóły:
+- **Metoda**: `GET`
+- **URL**: `http://localhost:8080/`
+- **Nagłówki**:
+  - Authorization: Basic Auth (ustaw username i password).
+
+#### Kroki:
+1. Wybierz metodę `GET` w Postman.
+2. Przejdź do zakładki **Authorization** i wybierz `Basic Auth`. Wprowadź swoje dane.
+3. Ustaw URL: `http://localhost:8080/`.
+4. Kliknij `Send`.
+
+---
+
+### **4. Aktualizacja nastroju**
+
+#### Szczegóły:
+- **Metoda**: `PUT`
+- **URL**: `http://localhost:8080/moods`
+- **Nagłówki**:
+  - Content-Type: `application/json`
+  - Authorization: Basic Auth (ustaw username i password).
+- **Body (JSON)**:
+  ```json
+  {
+      "id": 1,
+      "moodText": "Feeling tired",
+      "description": "After a long work day",
+      "alkochol": 0,
+      "sugar": 3,
+      "workout": 0,
+      "sleep": 5
+  }
+  ```
+
+#### Kroki:
+1. Wybierz metodę `PUT` w Postman.
+2. Ustaw dane w zakładce **Authorization** (Tak samo jak przy "Dodawaniu nastroju").
+3. Dodaj JSON do **Body**, tak jak w poprzednich krokach.
+4. Kliknij `Send`.
+
+---
+
+### **5. Usuwanie nastroju**
+
+#### Szczegóły:
+- **Metoda**: `DELETE`
+- **URL**: `http://localhost:8080/moods/{id}`
+- **Nagłówki**:
+  - Authorization: Basic Auth (ustaw username i password).
+
+#### Kroki:
+1. Wybierz metodę `DELETE` w Postman.
+2. Ustaw dane w zakładce **Authorization**.
+3. Ustaw URL: np. `http://localhost:8080/moods/1`.
+4. Kliknij `Send`.
 
 ---
 
 ## Uwagi
 
-- Przy każdym żądaniu (poza `/register`) wymagane jest uwierzytelnienie za pomocą Basic Auth (nagłówek `Authorization`).
-- Kluczowe pola obsługiwane przez API przy operacjach CRUD:
-  - `moodText`: Tekst opisujący nastrój.
-  - `description`: Szczegółowy opis.
-  - `alkochol`, `sugar`: Wskaźniki spożycia.
-  - `workout`: 1 (był trening) lub 0 (brak treningu).
-  - `sleep`: Ilość godzin snu.
+- Upewnij się, że każdy request (np. PUT, GET, DELETE) wymaga uwierzytelnienia.
+- Konfigurację servera możesz dostosować w pliku `application.properties`.
 
 ---
 
-Daj znać, jeśli coś wymaga doprecyzowania! 😊
+Jeśli masz pytania, skontaktuj się! 😊
