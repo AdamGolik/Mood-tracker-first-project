@@ -1,278 +1,219 @@
-# Mood Tracker API
+# Mood Tracker Application
 
-Mood Tracker API to aplikacja do zarządzania nastrojami użytkownika za pomocą REST API. Projekt oparty jest na Spring Boot, z wykorzystaniem Spring Security i JPA dla obsługi bazy danych.
-
----
-
-## Funkcjonalności
-
-- Rejestracja użytkowników.
-- Uwierzytelnianie użytkowników za pomocą Basic Auth (Spring Security).
-- CRUD (Create, Read, Update, Delete) dla zarządzania nastrojami.
-- Obsługa danych takich jak: `moodText`, `description`, `alkochol`, `sugar`, `workout`, `sleep`.
+Mood Tracker to aplikacja webowa umożliwiająca użytkownikom zarządzanie swoimi nastrojami. Projekt bazuje na Spring Boot z użyciem Spring Security oraz relacyjnej bazy danych (np. MySQL) do przechowywania danych użytkowników oraz nastrojów.
 
 ---
 
-## Wymagania wstępne
+## 🚀 Funkcjonalności
 
-1. **Java** (Java 17 lub nowsza).
-2. **Maven** (do budowy projektu).
-3. **Baza danych** MySQL/PostgreSQL (lub inna skonfigurowana baza danych).
-4. Narzędzia do testowania API, np. **Postman** lub **cURL**.
+Aplikacja pozwala użytkownikom na:
 
----
+1. **Rejestrację nowych użytkowników**:
+   Endpointy umożliwiają tworzenie kont użytkowników i przechowywanie ich danych w bazie.
 
-## Instalacja i uruchomienie
+2. **Logowanie i autoryzację**:
+   Spring Security zarządza autoryzacją użytkowników oraz ich sesjami.
 
-1. **Skonfiguruj połączenie z bazą danych** w pliku `application.properties`:
-   ```properties
-   spring.datasource.url=jdbc:mysql://localhost:3306/demo
-   spring.datasource.username=your_database_user
-   spring.datasource.password=your_database_password
+3. **Dodawanie nastrojów (`Mood`)**:
+   Użytkownicy mogą dodawać szczegółowe informacje o swoim samopoczuciu, jak:
+   - Nazwa samopoczucia (np. "happy", "sad").
+   - Szczegóły dotyczące opisu nastroju.
+   - Wpływ różnych czynników (alkohol, cukier, ćwiczenia, sen).
 
-   spring.jpa.hibernate.ddl-auto=update
-   ```
+4. **Pobieranie istniejących nastrojów**:
+   Użytkownicy mogą przeglądać swoje zapisane nastroje.
 
-2. **Uruchom projekt w terminalu**:
-   ```bash
-   mvn spring-boot:run
-   ```
-
-3. **API jest teraz dostępne** pod adresem:  
-   `http://localhost:8080`
+5. **Przechowywanie danych w relacyjnej bazie danych**:
+   Encje `User` oraz `Mood` są powiązane w relacji `1:N`.
 
 ---
 
-## Endpointy API
+## 🛠️ Technologie
 
-### Rejestracja nowego użytkownika
-- **URL**: `POST /register`
-- **Opis**: Rejestruje nowego użytkownika.
-- **Body (JSON)**:
-  ```json
-  {
-      "username": "newUser",
-      "password": "securePassword"
-  }
-  ```
-
-### Pobranie wszystkich nastrojów użytkownika
-- **URL**: `GET /`
-- **Opis**: Pobiera wszystkie nastroje zalogowanego użytkownika.
-- **Nagłówki**:
-  - Authorization: Basic Auth.
-
-### Dodanie nowego nastroju
-- **URL**: `POST /moods`
-- **Opis**: Dodaje nowy nastrój do zalogowanego użytkownika.
-- **Body (JSON)**:
-  ```json
-  {
-      "moodText": "Feeling great!",
-      "description": "I had a productive day!",
-      "alkochol": 0,
-      "sugar": 2,
-      "workout": 1,
-      "sleep": 7
-  }
-  ```
-
-### Aktualizacja istniejącego nastroju
-- **URL**: `PUT /moods`
-- **Opis**: Edytuje istniejący nastrój.
-- **Body (JSON)**:
-  ```json
-  {
-      "id": 1,
-      "moodText": "Feeling even better!",
-      "description": "Amazing day!",
-      "alkochol": 0,
-      "sugar": 1,
-      "workout": 1,
-      "sleep": 8
-  }
-  ```
-
-### Usunięcie nastroju
-- **URL**: `DELETE /{id}`
-- **Opis**: Usuwa nastroj z podanym ID.
+- **Backend Framework**: Spring Boot (z wykorzystaniem Spring MVC oraz Spring Data JPA).
+- **Baza danych**: MySQL (lub dowolna inna relacyjna baza danych wspierana przez Hibernate).
+- **Autoryzacja/Uwierzytelnienie**: Spring Security (HTTP Basic Authentication, BCrypt).
+- **Język programowania**: Java 17+.
 
 ---
 
-## Testowanie za pomocą cURL
+## 📂 Struktura projektu
 
-### Rejestracja użytkownika
-```bash
-curl -X POST http://localhost:8080/register \
--H "Content-Type: application/json" \
--d '{
+- **Model/Encje**:
+  - `User`: reprezentuje użytkownika systemu.
+  - `Mood`: reprezentuje nastrój przypisany do konkretnego użytkownika.
+- **Controller**:
+  Obsługuje zapytania HTTP (POST, GET, DELETE, itd.) dla operacji na użytkownikach i nastrojach.
+- **Repository**:
+  Gromadzi operacje na bazie danych dzięki Spring Data JPA.
+- **Config**:
+  Konfiguracja Spring Security umożliwiająca uwierzytelnianie oraz autoryzację użytkowników.
+
+---
+
+## 📄 Endpointy API
+
+### **Rejestracja Użytkownika**
+**URL**: `/register`  
+**Metoda HTTP**: `POST`  
+**Dane wejściowe (Body)**:
+```json
+{
+  "username": "newUser",
+  "password": "securePassword"
+}
+```
+**Odpowiedź**:
+```json
+{
+  "id": 2,
+  "username": "newUser",
+  "password": "$2a$10$...hashed_password",
+  "moods": null
+}
+```
+
+---
+
+### **Logowanie Użytkownika**
+Używamy HTTP Basic Auth, przekazując dane użytkownika w nagłówku.
+
+---
+
+### **Dodawanie Nastroju**
+**URL**: `/moods`  
+**Metoda HTTP**: `POST`  
+**Authentikacja**: Wymagana (`username` i `password`)  
+**Dane wejściowe (Body)**:
+```json
+{
+  "mood": "happy",
+  "description": "Feels great!",
+  "alkohol": false,
+  "sugar": true,
+  "workout": false,
+  "sleep": 8
+}
+```
+**Odpowiedź**:
+```json
+{
+  "id": 1,
+  "mood": "happy",
+  "description": "Feels great!",
+  "alkohol": null,
+  "sugar": true,
+  "workout": false,
+  "sleep": 8,
+  "user": {
+    "id": 2,
     "username": "newUser",
-    "password": "securePassword"
-}'
+    "password": "$2a$10$..."
+  }
+}
 ```
 
-### Dodawanie nowego nastroju
-```bash
-curl -u newUser:securePassword \
--X POST http://localhost:8080/moods \
--H "Content-Type: application/json" \
--d '{
-    "moodText": "Feeling amazing!",
-    "description": "Great day!",
-    "alkochol": 0,
-    "sugar": 1,
-    "workout": 1,
+---
+
+### **Pobierz Wszystkie Nastroje**
+**URL**: `/moods`  
+**Metoda HTTP**: `GET`  
+**Authentikacja**: Wymagana (`username` i `password`)  
+**Odpowiedź**:
+```json
+[
+  {
+    "id": 1,
+    "mood": "happy",
+    "description": "Feels great!",
+    "alkohol": null,
+    "sugar": true,
+    "workout": false,
     "sleep": 8
-}'
-```
-
-### Pobranie wszystkich nastrojów
-```bash
-curl -u newUser:securePassword -X GET http://localhost:8080/
+  }
+]
 ```
 
 ---
 
-## Testowanie za pomocą Postman
-
-1. **Pobierz i zainstaluj Postman** ze strony [Postman Web](https://www.postman.com/).
-
-2. **Utwórz Workspace**:
-   - Otwórz aplikację Postman.
-   - Stwórz nowy Workspace lub użyj już istniejącego.
-
-3. **Endpointy do przetestowania**:
-
----
-
-### **1. Rejestracja nowego użytkownika**
-
-#### Szczegóły:
-- **Metoda**: `POST`
-- **URL**: `http://localhost:8080/register`
-- **Nagłówki**:
-  - Content-Type: `application/json`
-- **Body (JSON)**:
-  ```json
-  {
-      "username": "newUser",
-      "password": "securePassword"
-  }
-  ```
-
-#### Kroki:
-1. Wybierz metodę `POST` w Postman.
-2. Ustaw URL: `http://localhost:8080/register`.
-3. Przejdź do zakładki **Headers** i dodaj:
-   ```
-   Key: Content-Type 
-   Value: application/json
-   ```
-4. W zakładce **Body** wybierz typ `raw`, a następnie wklej podany JSON.
-5. Kliknij `Send`.
+### **Pobierz Nastrój po ID**
+**URL**: `/moods/{id}`  
+**Metoda HTTP**: `GET`  
+**Authentikacja**: Wymagana (`username` i `password`)  
+**Odpowiedź**:
+```json
+{
+  "id": 1,
+  "mood": "happy",
+  "description": "Feels great!",
+  "alkohol": null,
+  "sugar": true,
+  "workout": false,
+  "sleep": 8
+}
+```
 
 ---
 
-### **2. Dodawanie nowego nastroju**
+## ⚙️ Jak uruchomić
 
-#### Szczegóły:
-- **Metoda**: `POST`
-- **URL**: `http://localhost:8080/moods`
-- **Nagłówki**:
-  - Content-Type: `application/json`
-  - Authorization: Basic Auth (ustaw username i password).
-- **Body (JSON)**:
-  ```json
-  {
-      "moodText": "Feeling great!",
-      "description": "I had a great day!",
-      "alkochol": 0,
-      "sugar": 2,
-      "workout": 1,
-      "sleep": 7
-  }
-  ```
+1. Skonfiguruj środowisko:
+   - Zainstaluj JDK 17+.
+   - Skonfiguruj MySQL lub inną relacyjną bazę danych i utwórz schemat.
+   - W pliku `application.properties` dodaj szczegóły swojej bazy danych.
 
-#### Kroki:
-1. Wybierz metodę `POST` w Postman.
-2. Przejdź do zakładki **Authorization** i wybierz `Basic Auth`. Ustaw swoje `username` oraz `password`.
-3. Ustaw URL: `http://localhost:8080/moods`.
-4. Przejdź do zakładki **Headers** i dodaj:
-   ```
-   Key: Content-Type 
-   Value: application/json
-   ```
-5. W zakładce **Body** wybierz typ `raw`, a następnie wklej podany JSON.
-6. Kliknij `Send`.
+2. Zbuduj projekt:
+   - Uruchom komendę:
+     ```bash
+     ./mvnw clean install
+     ```
+
+3. Uruchom aplikację:
+   - Uruchom komendę:
+     ```bash
+     ./mvnw spring-boot:run
+     ```
+
+4. Używaj API przy pomocy klientów takich jak:
+   - **Postman**: Zbuduj i testuj zapytania HTTP.
+   - **cURL**: Wyślij żądania z terminala.
 
 ---
 
-### **3. Pobieranie wszystkich nastrojów**
+## 💾 Baza danych
 
-#### Szczegóły:
-- **Metoda**: `GET`
-- **URL**: `http://localhost:8080/`
-- **Nagłówki**:
-  - Authorization: Basic Auth (ustaw username i password).
+### Schemat `User`
+| Pole         | Typ             | Opis                      |
+|--------------|-----------------|---------------------------|
+| `id`         | `Long`          | Identyfikator użytkownika |
+| `username`   | `String`        | Nazwa użytkownika         |
+| `password`   | `String`        | Hasło (zakodowane)        |
+| `moods`      | `List<Mood>`    | Lista nastrojów           |
 
-#### Kroki:
-1. Wybierz metodę `GET` w Postman.
-2. Przejdź do zakładki **Authorization** i wybierz `Basic Auth`. Wprowadź swoje dane.
-3. Ustaw URL: `http://localhost:8080/`.
-4. Kliknij `Send`.
-
----
-
-### **4. Aktualizacja nastroju**
-
-#### Szczegóły:
-- **Metoda**: `PUT`
-- **URL**: `http://localhost:8080/moods`
-- **Nagłówki**:
-  - Content-Type: `application/json`
-  - Authorization: Basic Auth (ustaw username i password).
-- **Body (JSON)**:
-  ```json
-  {
-      "id": 1,
-      "moodText": "Feeling tired",
-      "description": "After a long work day",
-      "alkochol": 0,
-      "sugar": 3,
-      "workout": 0,
-      "sleep": 5
-  }
-  ```
-
-#### Kroki:
-1. Wybierz metodę `PUT` w Postman.
-2. Ustaw dane w zakładce **Authorization** (Tak samo jak przy "Dodawaniu nastroju").
-3. Dodaj JSON do **Body**, tak jak w poprzednich krokach.
-4. Kliknij `Send`.
+### Schemat `Mood`
+| Pole         | Typ             | Opis                      |
+|--------------|-----------------|---------------------------|
+| `id`         | `Long`          | Identyfikator nastroju    |
+| `mood`       | `String`        | Nazwa nastroju            |
+| `description`| `String`        | Opis                     |
+| `alkohol`    | `Boolean`       | Wpływ alkoholu            |
+| `sugar`      | `Boolean`       | Wpływ cukru               |
+| `workout`    | `Boolean`       | Ćwiczenia fizyczne        |
+| `sleep`      | `Integer`       | Czas snu w godzinach      |
+| `user`       | `User`          | Powiązany użytkownik      |
 
 ---
 
-### **5. Usuwanie nastroju**
+## 🛡️ Bezpieczeństwo
 
-#### Szczegóły:
-- **Metoda**: `DELETE`
-- **URL**: `http://localhost:8080/moods/{id}`
-- **Nagłówki**:
-  - Authorization: Basic Auth (ustaw username i password).
-
-#### Kroki:
-1. Wybierz metodę `DELETE` w Postman.
-2. Ustaw dane w zakładce **Authorization**.
-3. Ustaw URL: np. `http://localhost:8080/moods/1`.
-4. Kliknij `Send`.
+- Aplikacja korzysta z **Spring Security**:
+  - Uwierzytelnianie za pomocą HTTP Basic Auth.
+  - Hasła użytkowników kodowane przy użyciu **BCrypt**.
+  - Ręczne definiowanie endpointów dostępnych publicznie (np. `/register`).
+- CSRF jest domyślnie wyłączony (opcjonalne do konfiguracji).
 
 ---
 
-## Uwagi
+## 📧 Wsparcie
 
-- Upewnij się, że każdy request (np. PUT, GET, DELETE) wymaga uwierzytelnienia.
-- Konfigurację servera możesz dostosować w pliku `application.properties`.
-
----
-
-Jeśli masz pytania, skontaktuj się! 😊
+Jeśli potrzebujesz dalszej pomocy, skontaktuj się z autorem projektu.
