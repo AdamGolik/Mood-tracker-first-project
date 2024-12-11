@@ -15,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/")
+@CrossOrigin(origins = "http://localhost:5174") // Włącz CORS dla tego kontrolera
 public class Controller {
 
     @Autowired

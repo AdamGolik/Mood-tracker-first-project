@@ -1,5 +1,6 @@
 /Users/mac/Desktop/Projects/java/app/app-to-stear-web/demo10/src/main/java/com/example/demo/Demo10Application.java
 /Users/mac/Desktop/Projects/java/app/app-to-stear-web/demo10/src/main/java/com/example/demo/config/SecurityConfig.java
+/Users/mac/Desktop/Projects/java/app/app-to-stear-web/demo10/src/main/java/com/example/demo/config/WebConfig.java
 /Users/mac/Desktop/Projects/java/app/app-to-stear-web/demo10/src/main/java/com/example/demo/controller/Controller.java
 /Users/mac/Desktop/Projects/java/app/app-to-stear-web/demo10/src/main/java/com/example/demo/controller/CustomErrorController.java
 /Users/mac/Desktop/Projects/java/app/app-to-stear-web/demo10/src/main/java/com/example/demo/controller/MoodController.java
