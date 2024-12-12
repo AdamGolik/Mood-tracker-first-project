@@ -2,12 +2,13 @@ com/example/demo/config/WebConfig.class
 com/example/demo/models/Mood.class
 com/example/demo/service/MoodService.class
 com/example/demo/repository/UserRepository.class
-com/example/demo/controller/CustomErrorController.class
 com/example/demo/repository/MoodRepository.class
+com/example/demo/controller/custom/CustomErrorController.class
 com/example/demo/controller/Controller.class
+com/example/demo/controller/mood/MoodController.class
 com/example/demo/config/SecurityConfig.class
 com/example/demo/config/WebConfig$1.class
 com/example/demo/models/User.class
+com/example/demo/controller/user/UserController.class
 com/example/demo/Demo10Application.class
-com/example/demo/controller/MoodController.class
 com/example/demo/service/UserService.class

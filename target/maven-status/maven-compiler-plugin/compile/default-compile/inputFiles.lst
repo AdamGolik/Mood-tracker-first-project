@@ -2,8 +2,9 @@
 /Users/mac/Desktop/Projects/java/app/app-to-stear-web/Mood-tracker-first-project/src/main/java/com/example/demo/config/SecurityConfig.java
 /Users/mac/Desktop/Projects/java/app/app-to-stear-web/Mood-tracker-first-project/src/main/java/com/example/demo/config/WebConfig.java
 /Users/mac/Desktop/Projects/java/app/app-to-stear-web/Mood-tracker-first-project/src/main/java/com/example/demo/controller/Controller.java
-/Users/mac/Desktop/Projects/java/app/app-to-stear-web/Mood-tracker-first-project/src/main/java/com/example/demo/controller/CustomErrorController.java
-/Users/mac/Desktop/Projects/java/app/app-to-stear-web/Mood-tracker-first-project/src/main/java/com/example/demo/controller/MoodController.java
+/Users/mac/Desktop/Projects/java/app/app-to-stear-web/Mood-tracker-first-project/src/main/java/com/example/demo/controller/custom/CustomErrorController.java
+/Users/mac/Desktop/Projects/java/app/app-to-stear-web/Mood-tracker-first-project/src/main/java/com/example/demo/controller/mood/MoodController.java
+/Users/mac/Desktop/Projects/java/app/app-to-stear-web/Mood-tracker-first-project/src/main/java/com/example/demo/controller/user/UserController.java
 /Users/mac/Desktop/Projects/java/app/app-to-stear-web/Mood-tracker-first-project/src/main/java/com/example/demo/models/Mood.java
 /Users/mac/Desktop/Projects/java/app/app-to-stear-web/Mood-tracker-first-project/src/main/java/com/example/demo/models/User.java
 /Users/mac/Desktop/Projects/java/app/app-to-stear-web/Mood-tracker-first-project/src/main/java/com/example/demo/repository/MoodRepository.java
